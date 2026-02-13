@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""ValGap CLI — detect validation gaps in Python API models."""
+"""
+ValGap CLI — command-line interface for the validation gap detector.
+
+This module provides the CLI entry-point for ValGap. It discovers Python source
+files from the paths supplied by the user, delegates static analysis to
+``valgap_analyzer.analyze_source``, and formats the resulting ``Gap`` objects as
+human-readable text, JSON, or SARIF.
+
+Key components
+--------------
+- ``scan_path(path)``  — recursively collects ``.py`` files and runs the
+  analyzer on each, returning a list of ``(filepath, Gap)`` tuples.
+- ``print_text(results)`` — renders results as coloured, human-readable text.
+- ``main()``            — argparse-based CLI entry-point.
+
+Data flow
+---------
+Source code string → ``ast.parse`` (in valgap_analyzer) → constraint
+extraction into ``FieldInfo`` → gap detection producing ``Gap`` objects →
+formatting and output to stdout.
+"""
 import argparse
 import json
 import sys
